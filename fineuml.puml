@@ -1,0 +1,23 @@
+@startuml "techtribesjs"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+' !include C4_Container.puml
+
+LAYOUT_AS_SKETCH()
+'LAYOUT_WITH_LEGEND()
+
+Person_Ext(customer, "Webshop / POS Customer", "An individual customer or company customer representative.")
+System_Ext(webshop, "Reseller Webshop/POS")
+Rel_R(customer, webshop, "Uses")
+
+System_Boundary(system, "Reseller Service"){
+    Container(scoring_api, "Scoring Service", "", 1212)
+}
+
+System_Ext(backend, "Backend", "Provides product catalogue, order registration, credit check, number lookup and number reservation.")
+System_Ext(salesforce, "Salesforce")
+
+Rel_R(scoring_api, salesforce, "Create lead", "HTTP/REST")
+Rel(scoring_api, backend, "Uses", "HTTP/REST")
+Rel(webshop, scoring_api, "Check eligibility", "HTTP/REST")
+
+@enduml
